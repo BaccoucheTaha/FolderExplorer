@@ -81,7 +81,7 @@ public class MainWindow extends JFrame {
 		}
 		if(infoLabel == null){
 			infoLabel = new JLabel();
-		    mainPanel.add(infoLabel);
+		    mainPanel.add(infoLabel , BorderLayout.WEST);
 		}
 		
 		infoLabel.setText(text);
