@@ -55,9 +55,10 @@ public class ValiderAction extends AbstractAction {
 		
 		List<MyFile> filesList = new ArrayList<MyFile>(); 
 		
+		SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		
 		for(File currentFile : file.listFiles()){
 			
-			SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Date lastModifiedDate = new Date(currentFile.lastModified());
 			
 			String lastModification = ft.format(lastModifiedDate);
