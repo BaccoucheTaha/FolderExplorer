@@ -13,7 +13,7 @@ public class MyJTableModel extends AbstractTableModel {
 	
 	private List<MyFile> filesList = null;
 	
-	 private final String[] header = {"Nom", "modifié le", "Type" ,"taille"};
+	 private final String[] header = {"Nom", "ModifiÃ© le", "Type" ,"Taille"};
 	
 	public MyJTableModel(List<MyFile> filesList) {
 		super();
@@ -52,21 +52,21 @@ public class MyJTableModel extends AbstractTableModel {
 	 
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-     
-		switch(columnIndex){
-        case 0:
-            return filesList.get(rowIndex).getFileName();
-        case 1:
-            return filesList.get(rowIndex).getLastModificationDate();
-        case 2:
-            return (filesList.get(rowIndex).isDirectory() ? "Dossier de fichiers" : "Fichier");
-        case 3:
-            return filesList.get(rowIndex).getFileSize();
-        default:
-            return null; //Ne devrait jamais arriver
+
+        switch (columnIndex) {
+            case 0:
+                return filesList.get(rowIndex).getFileName();
+            case 1:
+                return filesList.get(rowIndex).getLastModificationDate();
+            case 2:
+                return (filesList.get(rowIndex).isDirectory() ? "Dossier de fichiers" : "Fichier");
+            case 3:
+                return filesList.get(rowIndex).getFileSize();
+            default:
+                throw new IllegalStateException("Ne devrait jamais arriver");
+        }
+
     }
-		
-	}
 
 	/**
 	 * @return the filesList

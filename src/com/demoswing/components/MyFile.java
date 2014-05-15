@@ -1,19 +1,15 @@
 package com.demoswing.components;
 
 public class MyFile {
-
 	private String fileName;
 	private String lastModificationDate;
 	private long fileSize;
 	private boolean isDirectory; 
-	
-	
 
-	
 	public MyFile(String fileName, String lastModificationDate, long fileSize,
 			boolean isDirectory) {
-		super();
-		this.fileName = fileName;
+
+        this.fileName = fileName;
 		this.lastModificationDate = lastModificationDate;
 		this.fileSize = fileSize;
 		this.isDirectory = isDirectory;
