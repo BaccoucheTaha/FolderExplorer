@@ -4,7 +4,6 @@
 package com.demoswing.components;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,12 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.WindowConstants;
-import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,10 +29,6 @@ import com.demoswing.util.FilesystemUtils;
 
 public class MainWindow extends JFrame {
 
-	/**
-	 * serialVersionUID
-	 */
-	private static final long serialVersionUID = -840221350852746153L;
 
 	
 	JTextField textField = null;
@@ -46,7 +41,7 @@ public class MainWindow extends JFrame {
 	JPanel mainPanel = null;
 	JTable tableau = null;
     JPanel uriPanel;
-
+    FileTreePane fileTreePane;
     JButton button;
 	/**
 	 * constructor 
@@ -68,7 +63,7 @@ public class MainWindow extends JFrame {
 
         getContentPane().add(uriPanel, BorderLayout.PAGE_START);
         getContentPane().add(mainPanel, BorderLayout.CENTER);
-	    
+        getContentPane().add(fileTreePane, BorderLayout.WEST);
 	    pack();
 	}
 
@@ -94,8 +89,7 @@ public class MainWindow extends JFrame {
         uriPanel.add(textField);
         uriPanel.add(button);
         
-        buildTreePanel();
-        
+        fileTreePane = new FileTreePane();
         
     }
 
@@ -124,6 +118,28 @@ public class MainWindow extends JFrame {
                 }
             }
         });
+        
+        fileTreePane.getArbre().addTreeSelectionListener(new TreeSelectionListener(){
+
+        	  public void valueChanged(TreeSelectionEvent event) {
+        	    if(fileTreePane.getArbre().getLastSelectedPathComponent() != null){
+        	      //La méthode getPath retourne un objet TreePath
+        	      textField.setText(getAbsolutePath(event.getPath()));
+        	    }
+        	  }
+        	         
+        	  private String getAbsolutePath(TreePath treePath){
+        	    String str = "";
+        	    //On balaie le contenu de l'objet TreePath
+        	    for(Object name : treePath.getPath()){
+        	      //Si l'objet a un nom, on l'ajoute au chemin
+        	      if(name != null && StringUtils.isNotEmpty(name.toString()))
+        	        str += name.toString();
+        	    }
+        	    return str;
+        	  }
+        	}); 
+        
     }
    
     private static void buildValidationUriMsgPane(File file){
@@ -183,59 +199,7 @@ public class MainWindow extends JFrame {
 	}
 	
 	
-	
-	  private void buildTreePanel(){      
-		  DefaultMutableTreeNode racine = new DefaultMutableTreeNode();       
-		    for(File file : File.listRoots()){
-		      DefaultMutableTreeNode lecteur = new DefaultMutableTreeNode(file.getAbsolutePath());
-		      try {
-		        for(File nom : file.listFiles()){
-		          DefaultMutableTreeNode node = new DefaultMutableTreeNode(nom.getName()+"\\");               
-		          lecteur.add(this.listFile(nom, node));               
-		        }
-		      } catch (NullPointerException e) {
-		    	  System.out.println(e.getCause());
-		    	}
 
-		      racine.add(lecteur);                 
-		    }
-		    
-		    JTree arbre = new JTree(racine);      
-		    //arbre.setPreferredSize(new Dimension(100, 600));
-		    JScrollPane jTreeScrollPanel = new JScrollPane(arbre);
-		    jTreeScrollPanel.setPreferredSize(new Dimension(150, 500));
-		    getContentPane().add(jTreeScrollPanel, BorderLayout.WEST);
-		    this.pack();
-		  }
-
-	  private DefaultMutableTreeNode listFile(File file, DefaultMutableTreeNode node){
-		    int count = 0;
-		      
-		    if(file.isFile())
-		      return new DefaultMutableTreeNode(file.getName());
-		    else{
-		      File[] list = file.listFiles();
-		      if(list == null)
-		        return new DefaultMutableTreeNode(file.getName());
-
-
-		      for(File nom : list){
-		        count++;
-		        //Pas plus de 5 enfants par noeud
-		        if(count < 5){
-		          DefaultMutableTreeNode subNode;
-		          if(nom.isDirectory()){
-		            subNode = new DefaultMutableTreeNode(nom.getName()+"\\");
-		            node.add(this.listFile(nom, subNode));
-		          }else{
-		            subNode = new DefaultMutableTreeNode(nom.getName());
-		          }
-		          node.add(subNode);
-		        }
-		      }
-		      return node;
-		    }
-		  }
 	
 	/**
 	 * @return textField

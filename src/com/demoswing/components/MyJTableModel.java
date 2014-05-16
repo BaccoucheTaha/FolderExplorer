@@ -6,10 +6,6 @@ import javax.swing.table.AbstractTableModel;
 
 public class MyJTableModel extends AbstractTableModel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2188050425108136352L;
 	
 	private List<MyFile> filesList = null;
 	
