@@ -11,7 +11,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-
+// TODO  - OK, mais pour faire plus joli c'aurait été pas mal d'utiliser MyFile
+// apres l'avoir fait implémenter MutableTreeNode
 public class FileTreePane extends JPanel {
 
 	private JTree arbre;

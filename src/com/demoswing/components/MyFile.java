@@ -1,10 +1,19 @@
 package com.demoswing.components;
 
-public class MyFile {
+import javax.swing.tree.TreeNode;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.List;
+
+public class MyFile implements TreeNode {
 	private String fileName;
 	private String lastModificationDate;
 	private long fileSize;
-	private boolean isDirectory; 
+	private boolean isDirectory;
+    private List<MyFile> files;
+
+    private MyFile parent;
 
 	public MyFile(String fileName, String lastModificationDate, long fileSize,
 			boolean isDirectory) {
@@ -13,6 +22,7 @@ public class MyFile {
 		this.lastModificationDate = lastModificationDate;
 		this.fileSize = fileSize;
 		this.isDirectory = isDirectory;
+        this.files = new ArrayList<>();
 	}
 
 	public String getFileName() {
@@ -57,8 +67,66 @@ public class MyFile {
 	public void setDirectory(boolean isDirectory) {
 		this.isDirectory = isDirectory;
 	}
-	
-	
-	
-	
+
+
+    @Override
+    public TreeNode getChildAt(int childIndex) {
+        return files.get(childIndex);
+    }
+
+    @Override
+    public int getChildCount() {
+        return files.size();
+    }
+
+    @Override
+    public TreeNode getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public int getIndex(TreeNode node) {
+        if (!(node instanceof MyFile)) {
+            throw new IllegalArgumentException("Unsupported type for the tree node " + node);
+        }
+        return this.files.indexOf(node);
+    }
+
+    @Override
+    public boolean getAllowsChildren() {
+        return true;
+    }
+
+    @Override
+    public boolean isLeaf() {
+        return this.files.isEmpty();
+    }
+
+    @Override
+    public Enumeration children() {
+        final Iterator<MyFile> it = this.files.iterator();
+        return new Enumeration() {
+            @Override
+            public boolean hasMoreElements() {
+                return it.hasNext();
+            }
+
+            @Override
+            public Object nextElement() {
+                return it.next();
+            }
+        };
+    }
+
+    public List<MyFile> getFiles() {
+        return files;
+    }
+
+    public void setFiles(List<MyFile> files) {
+        this.files = files;
+    }
+
+    public void setParent(MyFile parent) {
+        this.parent = parent;
+    }
 }
